@@ -7,7 +7,6 @@ import mapboxgl from '!mapbox-gl'; // eslint-disable-line
 import axios from 'axios';
 import Pin from './pin';
 
-
 export default function App() {
   mapboxgl.accessToken = process.env.REACT_APP_TOKEN
   const mapRef = useRef(null)
@@ -20,21 +19,10 @@ export default function App() {
     pitch: 0,
     zoom: 10.45
   })
-  const [fuelPrices, setFuelPrices] = useState([])
-  useEffect(() => {
-    axios.get("/api/Price/GetSitesPrices?countryId=21&geoRegionLevel=3&geoRegionId=4")
-      .then((data) => {
-        setFuelPrices(data.data)
-      })
-      .catch((err) => {
-        console.log("err " + err);
-      });
-  }, []);
-
 
   const [fuelMark, setFuelMark] = useState([])
   useEffect(() => {
-    axios.get("http://localhost:3004/getFullSiteDetails?countryId=21&geoRegionLevel=3&geoRegionId=4")
+    axios.get("http://localhost:3001/Subscriber/getFullSiteDetails?countryId=21&geoRegionLevel=3&geoRegionId=4")
       .then((data) => {
         setFuelMark(data.data)
       })
@@ -43,8 +31,33 @@ export default function App() {
       });
   }, []);
 
+  const [fuelPrices, setFuelPrices] = useState([])
+  useEffect(() => {
+    axios.get(`http://localhost:3001/Price/GetSitesPrices?countryId=21&geoRegionLevel=3&geoRegionId=4`).then(({ data }) => {
+      setFuelPrices(data)
+    })
+      .catch((err) => {
+        console.log("err " + err);
+      })
+  }, []);
+
+  // let fuelReducer = {}
+  // // fuelMark.S && Object.keys(fuelMark.S)
+  // fuelPrices.SitePrices && Object.keys(fuelPrices.SitePrices).forEach((fuel, index) => {
+  //   fuelMark.S[index] = fuelPrices.SitePrices[index]
+  // })
+  // console.log(fuelMark)
+  // console.log(fuelPrices)
+  // console.log(fuelReducer)
+
+
+
+
+
+
+
   const [popupInfo, setPopupInfo] = useState(null);
-  console.log(fuelMark.S)
+  // console.log(fuelMark)
   const pins = useMemo(
     () =>
       fuelMark.S && Object.keys(fuelMark.S).map((fuel, index) => {
@@ -84,6 +97,7 @@ export default function App() {
         ref={mapRef}
       >
         <ScaleControl />
+        {/* <ControlPanel /> */}
         {pins}
 
         {/* {
@@ -162,7 +176,7 @@ export default function App() {
           </Popup>
         )}
       </ReactMapGL >
-      {/* <ControlPanel /> */}
+
     </>
   )
 }

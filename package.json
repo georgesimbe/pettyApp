@@ -1,7 +1,7 @@
 {
   "name": "petty",
   "version": "0.1.0",
-  "proxy": "http://localhost:3004",
+  "proxy": "https://http://localhost:3001/",
   "private": true,
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "^5.0.1",
